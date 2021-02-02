@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  icalserver:
+    build: .
+    ports:
+      - "8091:8091"
+    expose:
+      - 8091
+    restart: always

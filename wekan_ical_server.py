@@ -8,7 +8,7 @@ import dateutil.parser
 load_dotenv()
 
 LISTEN_HOST = os.environ.get("LISTEN_HOST", default="127.0.0.1")
-LISTEN_PORT = os.environ.get("LISTEN_PORT", default=8091)
+LISTEN_PORT = int(os.environ.get("LISTEN_PORT", default=8091))
 WEKAN_HOST = os.environ["WEKAN_HOST"]
 WEKAN_USER = os.environ["WEKAN_USER"]
 WEKAN_PASSWORD = os.environ["WEKAN_PASSWORD"]
@@ -43,8 +43,7 @@ class MyHandler(BaseHTTPRequestHandler):
         s.send_response(200)
         s.send_header("Content-type", "text/calendar")
         s.end_headers()
-        data = cal.serialize().encode()
-        s.wfile.write(data)
+        s.wfile.write(cal.serialize().encode())
 
 
 if __name__ == "__main__":
