@@ -1,0 +1,16 @@
+certifi==2020.12.5
+chardet==4.0.0
+flake8==3.8.4
+idna==2.10
+mccabe==0.6.1
+pycodestyle==2.6.0
+pyflakes==2.2.0
+pyreadline==2.1
+python-dateutil==2.8.1
+python-dotenv==0.15.0
+requests==2.25.1
+six==1.15.0
+urllib3==1.26.3
+vobject==0.9.6.1
+wekanapi @ git+https://github.com/wekan/wekan-python-api-client.git@7c4a75dd218a413c1f27d3db5acae56d63bb3706#subdirectory=src
+wincertstore==0.2
