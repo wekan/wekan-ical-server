@@ -1,11 +1,9 @@
 import os
-from dotenv import load_dotenv
 from wekanapi import WekanApi
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import vobject
 import dateutil.parser
 
-load_dotenv()
 
 LISTEN_HOST = os.environ.get("LISTEN_HOST", default="127.0.0.1")
 LISTEN_PORT = int(os.environ.get("LISTEN_PORT", default=8091))
