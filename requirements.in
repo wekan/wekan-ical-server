@@ -1,0 +1,2 @@
+vobject
+wekanapi @ git+https://github.com/wekan/wekan-python-api-client.git@7c4a75dd218a413c1f27d3db5acae56d63bb3706#subdirectory=src
