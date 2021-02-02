@@ -8,3 +8,9 @@ services:
     expose:
       - 8091
     restart: always
+    environment:
+      - WEKAN_HOST=yourwekanhost.de
+      - WEKAN_USER=admin
+      - WEKAN_PASSWORD=admin
+      - LISTEN_HOST=0.0.0.0
+      - LISTEN_PORT=8091
