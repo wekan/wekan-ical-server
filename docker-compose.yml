@@ -14,3 +14,4 @@ services:
       - WEKAN_PASSWORD=admin
       - LISTEN_HOST=0.0.0.0
       - LISTEN_PORT=8091
+      - CACHE_SEC=-1
