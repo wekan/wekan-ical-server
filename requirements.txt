@@ -20,5 +20,5 @@ urllib3==1.26.3
     # via requests
 vobject==0.9.6.1
     # via -r requirements.in
-git+https://github.com/wekan/wekan-python-api-client.git@7c4a75dd218a413c1f27d3db5acae56d63bb3706#subdirectory=src
+git+https://github.com/wekan/wekan-python-api-client.git@82ae0b685fc2bd74a52401e2716551e59a3df019#subdirectory=src
     # via -r requirements.in
