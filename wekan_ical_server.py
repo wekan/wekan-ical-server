@@ -3,13 +3,14 @@ from wekanapi import WekanApi
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import vobject
 import dateutil.parser
-
+import time
 
 LISTEN_HOST = os.environ.get("LISTEN_HOST", default="127.0.0.1")
 LISTEN_PORT = int(os.environ.get("LISTEN_PORT", default=8091))
 WEKAN_HOST = os.environ["WEKAN_HOST"]
 WEKAN_USER = os.environ["WEKAN_USER"]
 WEKAN_PASSWORD = os.environ["WEKAN_PASSWORD"]
+CACHE_SEC = int(os.environ.get("CACHE_SEC", default=-1))  # In seconds
 
 
 def create_ical_event(cal, board, card, card_info):
@@ -22,26 +23,37 @@ def create_ical_event(cal, board, card, card_info):
 
 
 class MyHandler(BaseHTTPRequestHandler):
-    def do_GET(s):
-        wekan_api = WekanApi(
-            WEKAN_HOST, {"username": WEKAN_USER, "password": WEKAN_PASSWORD}
-        )
+    cachedResponse = b''
+    lastUpdateTimestamp = 0
 
-        cal = vobject.iCalendar()
-        boards = wekan_api.get_user_boards()
-        for board in boards:
-            cardslists = board.get_cardslists()
-            for cardslist in cardslists:
-                cards = cardslist.get_cards()
-                for card in cards:
-                    info = card.get_card_info()
-                    if "dueAt" in info and info["dueAt"] is not None:
-                        create_ical_event(cal, board, card, info)
+    def do_GET(s):
+        curTimestamp = time.time()
+        if curTimestamp - MyHandler.lastUpdateTimestamp > CACHE_SEC:
+            MyHandler.lastUpdateTimestamp = curTimestamp
+
+            wekan_api = WekanApi(
+                WEKAN_HOST, {"username": WEKAN_USER, "password": WEKAN_PASSWORD}
+            )
+
+            cal = vobject.iCalendar()
+            boards = wekan_api.get_user_boards()
+            for board in boards:
+                if board.title == 'Templates':
+                    continue
+                cardslists = board.get_cardslists()
+                for cardslist in cardslists:
+                    cards = cardslist.get_cards()
+                    for card in cards:
+                        info = card.get_card_info()
+                        if "dueAt" in info and info["dueAt"] is not None:
+                            create_ical_event(cal, board, card, info)
+
+            MyHandler.cacheResponse = cal.serialize().encode()
 
         s.send_response(200)
         s.send_header("Content-type", "text/calendar")
         s.end_headers()
-        s.wfile.write(cal.serialize().encode())
+        s.wfile.write(MyHandler.cacheResponse)
 
 
 if __name__ == "__main__":
